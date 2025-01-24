@@ -8,3 +8,10 @@ import (
 func GetUser() ([]models.User, error) {
 	return repositories.GetAllUsers()
 }
+
+func Register(req models.User) (bool, error) {
+	return repositories.Register(req)
+}
+func GetUserByUsername(username string) (*models.User, error) {
+	return repositories.GetUserByUsername(username)
+}

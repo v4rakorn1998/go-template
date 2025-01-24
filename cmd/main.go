@@ -18,8 +18,11 @@ func main() {
 	app := fiber.New()
 
 	// ตั้งค่า Routes
-	routes.Setup(app)
+	routes.AuthRoutes(app)
+	routes.UserRoutes(app)
 
 	// เริ่มเซิร์ฟเวอร์
 	app.Listen(":" + os.Getenv("PORT"))
+	//add midder ware regis password
+	//go run cmd/main.go   (for run app)
 }
