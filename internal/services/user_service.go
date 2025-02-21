@@ -9,7 +9,7 @@ func GetUser() ([]models.User, error) {
 	return repositories.GetAllUsers()
 }
 
-func Register(req models.User) (bool, error) {
+func Register(req models.Register) (bool, error) {
 	return repositories.Register(req)
 }
 func GetUserByUsername(username string) (*models.User, error) {

@@ -54,7 +54,7 @@ func Login(c *fiber.Ctx) error {
 
 // ฟังก์ชันสำหรับสมัครสมาชิก
 func Register(c *fiber.Ctx) error {
-	user := new(models.User)
+	user := new(models.Register)
 	if err := c.BodyParser(user); err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString(err.Error())
 	}
