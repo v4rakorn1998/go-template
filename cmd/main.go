@@ -20,6 +20,7 @@ func main() {
 	// ตั้งค่า Routes
 	routes.AuthRoutes(app)
 	routes.UserRoutes(app)
+	routes.CustomersRoutes(app)
 
 	// เริ่มเซิร์ฟเวอร์
 	app.Listen(":" + os.Getenv("PORT"))

@@ -7,20 +7,40 @@ import (
 	"github.com/v4rakorn1998/go-template/internal/models"
 )
 
-func GetAllUsers() ([]models.User, error) {
-	rows, err := db.DB.Query("SELECT id, username, password, role_code, status, created_by, created_date, updated_by, updated_date FROM users")
+func GetAllUsers(req models.UserRequest) ([]models.UserResponse, error) {
+
+	sql := `SELECT row_num,user_id,username,role_code,status,created_by,created_date,updated_by,updated_date,first_name,last_name,date_of_birth,address,phone_number,email,profile_picture_url 
+			FROM public.fn_get_users_page($1, $2, $3)`
+
+	rows, err := db.DB.Query(sql, req.PageNumber, req.PageSize, req.SearchName)
 	if err != nil {
 		log.Println("Error executing query:", err)
 		return nil, err
 	}
 	defer rows.Close()
-
-	var users []models.User
+	var users []models.UserResponse
 	for rows.Next() {
-		var user models.User
-		if err := rows.Scan(&user.ID, &user.Username, &user.Password, &user.RoleCode, &user.Status, &user.CreatedBy, &user.CreatedDate, &user.UpdatedBy, &user.UpdatedDate); err != nil {
+		var user models.UserResponse
+		if err := rows.Scan(&user.RowNumber,
+			&user.UserID,
+			&user.Username,
+			&user.RoleCode,
+			&user.Status,
+			&user.CreatedBy,
+			&user.CreatedDate,
+			&user.UpdatedBy,
+			&user.UpdatedDate,
+			&user.FirstName,
+			&user.LastName,
+			&user.DateOfBirth,
+			&user.Address,
+			&user.PhoneNumber,
+			&user.Email,
+			&user.ProfilePictureUrl,
+		); err != nil {
 			return nil, err
 		}
+
 		users = append(users, user)
 	}
 

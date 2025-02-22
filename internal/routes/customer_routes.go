@@ -6,10 +6,9 @@ import (
 	"github.com/v4rakorn1998/go-template/internal/handlers"
 )
 
-func UserRoutes(app *fiber.App) {
-	api := app.Group("/api/users")
+func CustomersRoutes(app *fiber.App) {
+	api := app.Group("/api")
 
 	// User Routes
-	api.Post("/", auth.AuthMiddleware, handlers.GetUser)
-
+	api.Post("/customers", auth.AuthMiddleware, handlers.GetCustomersList)
 }

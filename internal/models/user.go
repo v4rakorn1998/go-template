@@ -13,6 +13,31 @@ type User struct {
 	UpdatedDate string `json:"updated_date"`
 }
 
+type UserRequest struct {
+	PageNumber int    `json:"pageNumber"`
+	PageSize   int    `json:"pageSize"`
+	SearchName string `json:"SearchName"`
+}
+
+type UserResponse struct {
+	RowNumber         int    `json:"rowNumber"`
+	UserID            int    `json:"userID"`
+	Username          string `json:"username"`
+	RoleCode          string `json:"roleCode"`
+	FirstName         string `json:"firstName"`
+	LastName          string `json:"lastName"`
+	DateOfBirth       string `json:"dob"`
+	Address           string `json:"address"`
+	PhoneNumber       string `json:"phoneNumber"`
+	Email             string `json:"email"`
+	ProfilePictureUrl string `json:"profilePictureUrl"`
+	Status            bool   `json:"status"`
+	CreatedBy         string `json:"createdBy"`
+	CreatedDate       string `json:"createdDate"`
+	UpdatedBy         string `json:"updatedBy"`
+	UpdatedDate       string `json:"updatedDate"`
+}
+
 type Register struct {
 	Username    string `json:"username"`
 	Password    string `json:"password"`

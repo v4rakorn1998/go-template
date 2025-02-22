@@ -6,15 +6,16 @@ import (
 	"github.com/v4rakorn1998/go-template/internal/services"
 )
 
-func GetUser(c *fiber.Ctx) error {
-	request := new(models.UserRequest)
+func GetCustomersList(c *fiber.Ctx) error {
+
+	request := new(models.CustomerRequest)
 	if err := c.BodyParser(request); err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString(err.Error())
 	}
-	users, err := services.GetUser(*request)
+
+	customer, err := services.GetCustomersList(*request)
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": err.Error()})
 	}
-
-	return c.JSON(users)
+	return c.JSON(customer)
 }
