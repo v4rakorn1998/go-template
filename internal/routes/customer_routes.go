@@ -11,4 +11,8 @@ func CustomersRoutes(app *fiber.App) {
 
 	// User Routes
 	api.Post("/customers", auth.AuthMiddleware, handlers.GetCustomersList)
+	api.Post("/createCustomer", auth.AuthMiddleware, handlers.CreateCustomer)
+	api.Put("/updateCustomer/:id", auth.AuthMiddleware, handlers.UpdateCustomer)
+	api.Delete("/deleteCustomer/:id", auth.AuthMiddleware, handlers.DeleteCustomer)
+
 }

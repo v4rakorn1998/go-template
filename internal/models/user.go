@@ -5,17 +5,17 @@ type User struct {
 	ID          int    `json:"id"`
 	Username    string `json:"username"`
 	Password    string `json:"password"`
-	RoleCode    string `json:"role_code"`
+	RoleCode    string `json:"roleCode"`
 	Status      bool   `json:"status"`
-	CreatedBy   string `json:"created_by"`
-	CreatedDate string `json:"created_date"`
-	UpdatedBy   string `json:"updated_by"`
-	UpdatedDate string `json:"updated_date"`
+	CreatedBy   string `json:"createdBy"`
+	CreatedDate string `json:"createdDate"`
+	UpdatedBy   string `json:"updatedBy"`
+	UpdatedDate string `json:"updatedDate"`
 }
 
-type UserRequest struct {
-	PageNumber int    `json:"pageNumber"`
-	PageSize   int    `json:"pageSize"`
+type UserSearchRequest struct {
+	PageNumber int    `json:"pageNumber" validate:"required,min=1"`
+	PageSize   int    `json:"pageSize" validate:"required,min=1"`
 	SearchName string `json:"SearchName"`
 }
 
@@ -49,4 +49,33 @@ type Register struct {
 	PhoneNumber string `json:"phoneNumber"`
 	Email       string `json:"email"`
 	PicUrl      string `json:"picUrl"`
+}
+
+type UserRequest struct {
+	Username    string `json:"username" validate:"required"`
+	Password    string `json:"password"`
+	RoleCode    string `json:"roleCode" validate:"required"`
+	FirstName   string `json:"firstName" validate:"required"`
+	LastName    string `json:"lastName" validate:"required"`
+	DateOfBirth string `json:"dob" validate:"required"`
+	Address     string `json:"address" validate:"required"`
+	PhoneNumber string `json:"phoneNumber" validate:"required"`
+	Email       string `json:"email" validate:"required"`
+	PicUrl      string `json:"picUrl"`
+}
+type ChangePasswordRequest struct {
+	OldPassword string `json:"oldPassword" validate:"required"`
+	Password    string `json:"password" validate:"required"`
+	ActionBy    string `json:"actionBy"`
+}
+
+type UpdateUserRequest struct {
+	RoleCode    string `json:"roleCode" validate:"required"`
+	FirstName   string `json:"firstName" validate:"required"`
+	LastName    string `json:"lastName" validate:"required"`
+	DateOfBirth string `json:"dob" validate:"required"`
+	Address     string `json:"address" validate:"required"`
+	PhoneNumber string `json:"phoneNumber" validate:"required"`
+	Email       string `json:"email" validate:"required"`
+	ActionBy    string `json:"actionBy"`
 }

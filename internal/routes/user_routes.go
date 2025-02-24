@@ -11,5 +11,10 @@ func UserRoutes(app *fiber.App) {
 
 	// User Routes
 	api.Post("/", auth.AuthMiddleware, handlers.GetUser)
+	api.Post("/createUser", auth.AuthMiddleware, handlers.CreateUser)
+	api.Put("/updateUser/:id", auth.AuthMiddleware, handlers.UpdateUser)
+	api.Delete("/deleteUser/:id", auth.AuthMiddleware, handlers.DeleteUser)
+	api.Put("/changePassword/:id", auth.AuthMiddleware, handlers.ChangePassword)
+	api.Put("/resetPassword/:id", auth.AuthMiddleware, auth.CheckRoleAdmin, handlers.ResetPassword)
 
 }

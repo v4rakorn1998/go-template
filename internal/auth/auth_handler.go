@@ -1,10 +1,12 @@
 package auth
 
 import (
+	"fmt"
 	"time"
 
 	"strings"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt"
 	"github.com/v4rakorn1998/go-template/config"
 	"github.com/v4rakorn1998/go-template/internal/models"
@@ -15,19 +17,28 @@ import (
 )
 
 func Login(c *fiber.Ctx) error {
-	loginData := new(models.Auth)
-	if err := c.BodyParser(loginData); err != nil {
+	request := new(models.Auth)
+	if err := c.BodyParser(request); err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString(err.Error())
 	}
 
-	user, err := services.GetUserByUsername(loginData.Username)
+	// ตรวจสอบข้อมูลด้วย Validator
+	if err := models.Validate.Struct(request); err != nil {
+		errors := make(map[string]string)
+		for _, err := range err.(validator.ValidationErrors) {
+			errors[err.Field()] = fmt.Sprintf("Failed on '%s' condition", err.Tag())
+		}
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"errors": errors})
+	}
+
+	user, err := services.GetUserByUsername(request.Username)
 	if err != nil {
 		// ถ้าผู้ใช้ไม่พบ หรือมีข้อผิดพลาดจากการค้นหา, ส่ง error
 		return c.Status(fiber.StatusUnauthorized).SendString("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง")
 	}
 
 	// เปรียบเทียบรหัสผ่านที่ผู้ใช้กรอกกับรหัสผ่านที่เก็บไว้ในฐานข้อมูล
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginData.Password))
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(request.Password))
 	if err != nil {
 		// ถ้ารหัสผ่านไม่ถูกต้อง, ส่ง error
 		return c.Status(fiber.StatusUnauthorized).SendString("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง")
@@ -38,6 +49,7 @@ func Login(c *fiber.Ctx) error {
 	token := jwt.New(jwt.SigningMethodHS256)
 	token.Claims = jwt.MapClaims{
 		"username": user.Username,
+		"roleCode": user.RoleCode,
 		"exp":      time.Now().Add(time.Hour * 2).Unix(), // หมดอายุใน 24 ชั่วโมง
 	}
 
@@ -112,7 +124,18 @@ func AuthMiddleware(c *fiber.Ctx) error {
 
 	// ตั้งค่า username ใน context เพื่อใช้งานใน controller ต่าง ๆ
 	c.Locals("username", claims["username"])
+	c.Locals("roleCode", claims["roleCode"])
+	// ถ้า token ถูกต้องให้ดำเนินการต่อ
+	return c.Next()
+}
 
+// AuthMiddleware ฟังก์ชันสำหรับตรวจสอบ JWT
+func CheckRoleAdmin(c *fiber.Ctx) error {
+
+	roleCode := c.Locals("roleCode").(string) == "admin"
+	if !roleCode {
+		return c.Status(fiber.StatusForbidden).SendString("Forbidden: Insufficient permissions")
+	}
 	// ถ้า token ถูกต้องให้ดำเนินการต่อ
 	return c.Next()
 }
