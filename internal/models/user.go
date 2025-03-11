@@ -81,3 +81,20 @@ type UpdateUserRequest struct {
 	Email       string `json:"email" validate:"required"`
 	ActionBy    string `json:"actionBy"`
 }
+type UserProfileResponse struct {
+	UserID            int    `json:"userID"`
+	Username          string `json:"username"`
+	RoleCode          string `json:"roleCode"`
+	RoleName          string `json:"roleName"`
+	FirstName         string `json:"firstName"`
+	LastName          string `json:"lastName"`
+	DateOfBirth       string `json:"dob"`
+	Address           string `json:"address"`
+	PhoneNumber       string `json:"phoneNumber"`
+	Email             string `json:"email"`
+	ProfilePictureUrl string `json:"profilePictureUrl"`
+	CreatedBy         string `json:"createdBy"`
+	CreatedDate       string `json:"createdDate"`
+	UpdatedBy         string `json:"updatedBy"`
+	UpdatedDate       string `json:"updatedDate"`
+}

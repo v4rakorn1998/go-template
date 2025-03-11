@@ -241,3 +241,15 @@ func ResetPassword(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(res)
 
 }
+
+func GetProfile(c *fiber.Ctx) error {
+
+	username := c.Locals("username").(string)
+
+	users, err := services.GetUserProfile(username)
+	if err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return c.JSON(users)
+}

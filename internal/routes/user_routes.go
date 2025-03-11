@@ -16,5 +16,6 @@ func UserRoutes(app *fiber.App) {
 	api.Delete("/deleteUser/:id", auth.AuthMiddleware, handlers.DeleteUser)
 	api.Put("/changePassword/:id", auth.AuthMiddleware, handlers.ChangePassword)
 	api.Put("/resetPassword/:id", auth.AuthMiddleware, auth.CheckRoleAdmin, handlers.ResetPassword)
+	api.Get("/profile", auth.AuthMiddleware, handlers.GetProfile)
 
 }

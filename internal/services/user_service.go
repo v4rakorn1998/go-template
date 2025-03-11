@@ -28,3 +28,6 @@ func DeleteUser(id int, actionBy string) (bool, error) {
 func ChangePassword(id int, req models.ChangePasswordRequest) (bool, error) {
 	return repositories.ChangePassword(id, req)
 }
+func GetUserProfile(username string) (*models.UserProfileResponse, error) {
+	return repositories.GetUserProfile(username)
+}

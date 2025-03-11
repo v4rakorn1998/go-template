@@ -216,3 +216,22 @@ func ChangePassword(id int, req models.ChangePasswordRequest) (bool, error) {
 
 	return true, nil
 }
+
+func GetUserProfile(username string) (*models.UserProfileResponse, error) {
+
+	sql := `SELECT u.id, u.username, u.role_code, r.name as role_name, d.first_name, d.last_name, d.date_of_birth, d.address, d.phone_number, d.email, d.profile_picture_url, u.created_by, u.created_date, u.updated_by,u.updated_date
+			FROM public.users u
+			INNER JOIN public.users_detail d on u.id = d.user_id
+			INNER JOIN public.mas_roles r on u.role_code = r.code
+			where u.status = true and u.username = $1`
+
+	row := db.DB.QueryRow(sql, username)
+
+	var user models.UserProfileResponse
+	err := row.Scan(&user.UserID, &user.Username, &user.RoleCode, &user.RoleName, &user.FirstName, &user.LastName, &user.DateOfBirth, &user.Address, &user.PhoneNumber, &user.Email, &user.ProfilePictureUrl, &user.CreatedBy, &user.CreatedDate, &user.UpdatedBy, &user.UpdatedDate)
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+
+}
