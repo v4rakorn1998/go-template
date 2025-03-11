@@ -9,7 +9,7 @@ import (
 
 func GetAllUsers(req models.UserSearchRequest) ([]models.UserResponse, error) {
 
-	sql := `SELECT row_num,user_id,username,role_code,status,created_by,created_date,updated_by,updated_date,first_name,last_name,date_of_birth,address,phone_number,email,profile_picture_url 
+	sql := `SELECT total_count,row_num,user_id,username,role_code,role_name,status,created_by,created_date,updated_by,updated_date,first_name,last_name,date_of_birth,address,phone_number,email,profile_picture_url 
 			FROM public.fn_get_users_page($1, $2, $3)`
 
 	rows, err := db.DB.Query(sql, req.PageNumber, req.PageSize, req.SearchName)
@@ -20,10 +20,13 @@ func GetAllUsers(req models.UserSearchRequest) ([]models.UserResponse, error) {
 	var users []models.UserResponse
 	for rows.Next() {
 		var user models.UserResponse
-		if err := rows.Scan(&user.RowNumber,
+		if err := rows.Scan(
+			&user.TotalCount,
+			&user.RowNumber,
 			&user.UserID,
 			&user.Username,
 			&user.RoleCode,
+			&user.RoleName,
 			&user.Status,
 			&user.CreatedBy,
 			&user.CreatedDate,

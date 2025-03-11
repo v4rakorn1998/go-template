@@ -9,6 +9,7 @@ type CustomerSearchRequest struct {
 }
 
 type CustomerResponse struct {
+	TotalCount  int    `json:"totalCount"`
 	RowNumber   int    `json:"rowNumber"`
 	CustomerID  int    `json:"customerID"`
 	TypeCode    string `json:"typeCode"`

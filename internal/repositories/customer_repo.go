@@ -7,7 +7,7 @@ import (
 
 func GetCustomersList(req models.CustomerSearchRequest) ([]models.CustomerResponse, error) {
 
-	sql := `SELECT row_num,customer_id,type_code,full_name,address,phone_number,email,company_name,tax_id,status,created_by,created_date,updated_by,updated_date FROM fn_get_customer_page($1, $2, $3,$4)`
+	sql := `SELECT total_count,row_num,customer_id,type_code,full_name,address,phone_number,email,company_name,tax_id,status,created_by,created_date,updated_by,updated_date FROM fn_get_customer_page($1, $2, $3,$4)`
 
 	rows, err := db.DB.Query(sql, req.PageNumber, req.PageSize, req.SearchName, req.SearchTaxID)
 	if err != nil {
@@ -17,7 +17,9 @@ func GetCustomersList(req models.CustomerSearchRequest) ([]models.CustomerRespon
 	var customers []models.CustomerResponse
 	for rows.Next() {
 		var customer models.CustomerResponse
-		if err := rows.Scan(&customer.RowNumber,
+		if err := rows.Scan(
+			&customer.TotalCount,
+			&customer.RowNumber,
 			&customer.CustomerID,
 			&customer.TypeCode,
 			&customer.FullName,

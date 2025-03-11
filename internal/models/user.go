@@ -20,10 +20,12 @@ type UserSearchRequest struct {
 }
 
 type UserResponse struct {
+	TotalCount        int    `json:"totalCount"`
 	RowNumber         int    `json:"rowNumber"`
 	UserID            int    `json:"userID"`
 	Username          string `json:"username"`
 	RoleCode          string `json:"roleCode"`
+	RoleName          string `json:"roleName"`
 	FirstName         string `json:"firstName"`
 	LastName          string `json:"lastName"`
 	DateOfBirth       string `json:"dob"`
